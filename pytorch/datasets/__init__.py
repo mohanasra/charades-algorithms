@@ -9,6 +9,7 @@ import importlib
 
 def get_dataset(args):
     dataset = importlib.import_module('.'+args.dataset, package='datasets')
+    print("=> dataset '{}'".format(dataset))
     train_dataset, val_dataset, valvideo_dataset = dataset.get(args)
 
     if args.distributed:

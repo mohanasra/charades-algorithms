@@ -6,17 +6,17 @@ import os
 def parse():
     print('parsing arguments')
     parser = argparse.ArgumentParser(description='PyTorch Charades Training')
-    parser.add_argument('--data', metavar='DIR', default='/scratch/gsigurds/Charades_v1_rgb/',
+    parser.add_argument('--data', metavar='DIR', default='/home/mohana.r/data/code/git/charades-algorithms/datasets/Charades_v1_rgb',
                         help='path to dataset')
     parser.add_argument('--dataset', metavar='DIR', default='fake',
                         help='name of dataset under datasets/')
-    parser.add_argument('--train-file', default='./Charades_v1_train.csv', type=str)
-    parser.add_argument('--val-file', default='./Charades_v1_test.csv', type=str)
+    parser.add_argument('--train-file', default='./datasets/Charades/Charades_v1_train_small.csv', type=str)
+    parser.add_argument('--val-file', default='./datasets/Charades/Charades_v1_test_small.csv', type=str)
     parser.add_argument('--arch', '-a', metavar='ARCH', default='alexnet',
                         help='model architecture: ')
     parser.add_argument('-j', '--workers', default=4, type=int, metavar='N',
                         help='number of data loading workers (default: 4)')
-    parser.add_argument('--epochs', default=20, type=int, metavar='N',
+    parser.add_argument('--epochs', default=5, type=int, metavar='N',
                         help='number of total epochs to run')
     parser.add_argument('--start-epoch', default=0, type=int, metavar='N',
                         help='manual epoch number (useful on restarts)')
@@ -42,7 +42,7 @@ def parse():
     parser.add_argument('--world-size', default=1, type=int,
                         help='number of distributed processes')
     parser.add_argument('--manual-seed', default=0, type=int)
-    parser.add_argument('--dist-url', default='tcp://224.66.41.62:23456', type=str,
+    parser.add_argument('--dist-url', default='', type=str,
                         help='url used to set up distributed training')
     parser.add_argument('--dist-backend', default='gloo', type=str,
                         help='distributed backend')
@@ -54,7 +54,7 @@ def parse():
     parser.add_argument('--accum-grad', default=4, type=int)
     args = parser.parse_args()
     args.distributed = args.world_size > 1
-    args.cache = args.cache_dir+args.name+'/'
+    args.cache = args.cache_dir+args.name
     if not os.path.exists(args.cache):
         os.makedirs(args.cache)
 

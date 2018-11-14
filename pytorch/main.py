@@ -33,20 +33,27 @@ def main():
 
     model, criterion, optimizer = create_model(opt)
     if opt.resume: best_mAP = checkpoints.load(opt, model, optimizer)
-    print(model)
+#     print(model)
+#     print("Printed Model")
     trainer = train.Trainer()
     train_loader, val_loader, valvideo_loader = get_dataset(opt)
 
     if opt.evaluate:
+        print("=> evaluating...")
         trainer.validate(val_loader, model, criterion, -1, opt)
         trainer.validate_video(valvideo_loader, model, -1, opt)
+        print("=> evaluation complete...")
         return
 
     for epoch in range(opt.start_epoch, opt.epochs):
+        print("=> epoch '{}'".format(epoch))
         if opt.distributed:
             trainer.train_sampler.set_epoch(epoch)
+        print("=> epoch loop train train_loader")
         top1,top5 = trainer.train(train_loader, model, criterion, optimizer, epoch, opt)
+        print("=> epoch loop train val_loader")
         top1val,top5val = trainer.validate(val_loader, model, criterion, epoch, opt)
+        print("=> epoch loop train valvideo_loader")
         mAP = trainer.validate_video(valvideo_loader, model, epoch, opt)
         is_best = mAP > best_mAP
         best_mAP = max(mAP, best_mAP)

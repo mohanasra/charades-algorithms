@@ -10,12 +10,12 @@ args = [
     '--dataset', 'charadesrgb',
     '--arch', 'vgg16',
     '--lr', '1e-3',
-    '--batch-size', '64',
+    '--batch-size', '8',
     '--train-size', '0.1',
     '--val-size', '0.1',
-    '--cache-dir', '/nfs.yoda/gsigurds/ai2/caches/',
+    '--cache-dir', 'temp/gsigurds/ai2/caches/',
     '--pretrained',
-    '--resume', './twostream_rgb.pth.tar',
+    '--resume', '/home/mohana.r/data/code/git/charades-algorithms/datasets/twostream_rgb.pth.tar',
     '--evaluate',
 ]
 sys.argv.extend(args)

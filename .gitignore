@@ -1,4 +1,5 @@
 gen/
+datasets/
 libnccl.so
 model_best.t7
 checkpoints

@@ -3,6 +3,7 @@ import os
 import torch
 import shutil
 from collections import OrderedDict
+# from mimetypes import strict
 
 
 def ordered_load_state(model, chkpoint):
@@ -13,7 +14,8 @@ def ordered_load_state(model, chkpoint):
         of the two statese and tries again.
     """
     try:
-        model.load_state_dict(chkpoint)
+        print('attempting to load normally...')
+        model.load_state_dict(chkpoint, strict=False)
     except KeyError:  # assume order is the same, and use new labels
         print('keys do not match model, trying to align')
         modelkeys = model.state_dict().keys()
@@ -29,6 +31,7 @@ def load(args, model, optimizer):
             chkpoint = torch.load(args.resume)
             if isinstance(chkpoint, dict) and 'state_dict' in chkpoint:
                 args.start_epoch = chkpoint['epoch']
+                print("=> start_epoch - {}".format(args.start_epoch))
                 mAP = chkpoint['mAP']
                 ordered_load_state(model, chkpoint['state_dict'])
                 optimizer.load_state_dict(chkpoint['optimizer'])

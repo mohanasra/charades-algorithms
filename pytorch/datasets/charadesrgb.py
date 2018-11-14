@@ -12,9 +12,11 @@ import os
 
 def parse_charades_csv(filename):
     labels = {}
+    print("Parsing {}".format(filename))
     with open(filename) as f:
         reader = csv.DictReader(f)
         for row in reader:
+#             print("Row - {}".format(row))
             vid = row['id']
             actions = row['actions']
             if actions == '':
@@ -25,7 +27,6 @@ def parse_charades_csv(filename):
                     y), 'end': float(z)} for x, y, z in actions]
             labels[vid] = actions
     return labels
-
 
 def cls2int(x):
     return int(x[1:])
@@ -82,12 +83,14 @@ class Charades(data.Dataset):
         self.root = root
         cachename = '{}/{}_{}.pkl'.format(cachedir,
                                           self.__class__.__name__, split)
+        print("=> Charades.__init__")
         self.data = cache(cachename)(self.prepare)(root, self.labels, split)
 
     def prepare(self, path, labels, split):
         FPS, GAP, testGAP = 24, 4, 25
         datadir = path
         image_paths, targets, ids = [], [], []
+        print("=> Charades.prepare")
 
         for i, (vid, label) in enumerate(labels.iteritems()):
             iddir = datadir + '/' + vid
@@ -155,10 +158,13 @@ class Charades(data.Dataset):
 
 def get(args):
     """ Entry point. Call this function to get all Charades dataloaders """
+#     print("=> charadesrgb.get args - {}".)
     normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406],
                                      std=[0.229, 0.224, 0.225])
     train_file = args.train_file
+    print("=> train_file {}".format(train_file))
     val_file = args.val_file
+    print("=> val_file {}".format(val_file))
     train_dataset = Charades(
         args.data, 'train', train_file, args.cache,
         transform=transforms.Compose([

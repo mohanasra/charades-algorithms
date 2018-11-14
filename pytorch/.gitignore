@@ -1,4 +1,8 @@
 gen/
 checkpoints/
+temp/
 *.pyc
 *.swp
+.project
+.pydevproject
+

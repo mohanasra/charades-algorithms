@@ -10,10 +10,10 @@ args = [
     '--dataset', 'charadesrgb',
     '--arch', 'vgg16',
     '--lr', '1e-3',
-    '--batch-size', '64',
+    '--batch-size', '4',
     '--train-size', '0.1',
     '--val-size', '0.1',
-    '--cache-dir', '/nfs.yoda/gsigurds/ai2/caches/',
+    '--cache-dir', 'temp/gsigurds/ai2/caches/',
     '--pretrained',
     #'--evaluate',
 ]

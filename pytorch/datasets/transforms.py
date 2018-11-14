@@ -27,6 +27,7 @@ class Resize(parents.Resize):
     def __init__(self, *args, **kwargs):
         super(Resize, self).__init__(*args, **kwargs)
     def __call__(self, img):
+        print("transform=> img - {}".format(img))
         return [super(Resize, self).__call__(im) for im in img]
 
 

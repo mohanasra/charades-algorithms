@@ -12,6 +12,8 @@ import importlib
 
 
 def create_model(args):
+#     for m in tmodels.__dict__:
+#         print(m)
     if args.arch in tmodels.__dict__:  # torchvision models
         if args.pretrained:
             print("=> using pre-trained model '{}'".format(args.arch))
@@ -28,14 +30,17 @@ def create_model(args):
 
     # replace last layer
     if hasattr(model, 'classifier'):
+        print("=> Model has classifier")
         newcls = list(model.classifier.children())
         newcls = newcls[:-1] + [nn.Linear(newcls[-1].in_features, args.nclass).cuda()]
         model.classifier = nn.Sequential(*newcls)
     elif hasattr(model, 'fc'):
+        print("=> Model has fc")
         model.fc = nn.Linear(model.fc.in_features, args.nclass)
         if hasattr(model, 'AuxLogits'):
             model.AuxLogits.fc = nn.Linear(model.AuxLogits.fc.in_features, args.nclass)
     else:
+        print("=> Model does not have classifier & fc")
         newcls = list(model.children())[:-1]
         newcls = newcls[:-1] + [nn.Linear(newcls[-1].in_features, args.nclass).cuda()]
         model = nn.Sequential(*newcls)

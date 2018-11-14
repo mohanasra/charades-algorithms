@@ -68,19 +68,25 @@ class Trainer():
         top5 = AverageMeter()
 
         # switch to train mode
+        print("=>Trainer.train: top1 - {}, top5 - {}".format(top1, top5))
         model.train()
         optimizer.zero_grad()
+        print("=> Trainer.train() before def part(x)")
 
-        def part(x): return itertools.islice(x, int(len(x)*args.train_size))
+        def part(x):
+            print("=> part() x - {}, len(x) - {}".format(x, len(x)))
+            return itertools.islice(x, int(len(x)*args.train_size))
         end = time.time()
+        print("=> Trainer.train() before for i")
         for i, (input, target, meta) in enumerate(part(loader)):
             data_time.update(time.time() - end)
-
+            print("=> Trainer.train() inside for i - {}".format(i))
             target = target.long().cuda(async=True)
             input_var = torch.autograd.Variable(input.cuda())
             target_var = torch.autograd.Variable(target)
             output = model(input_var)
             loss = None
+            print("=> input_var - {}, target_var - {}".format(input_var, target_var))
             # for nets that have multiple outputs such as inception
             if isinstance(output, tuple):
                 loss = sum((criterion(o,target_var) for o in output))
@@ -111,6 +117,7 @@ class Trainer():
                           epoch, i, int(
                               len(loader)*args.train_size), len(loader),
                           batch_time=batch_time, data_time=data_time, loss=losses, top1=top1, top5=top5))
+        print("=> Trainer.train() after for i")
         return top1.avg,top5.avg
 
     def validate(self, loader, model, criterion, epoch, args):
@@ -125,6 +132,7 @@ class Trainer():
         def part(x): return itertools.islice(x, int(len(x)*args.val_size))
         end = time.time()
         for i, (input, target, meta) in enumerate(part(loader)):
+            print("train.validate=> i - {}, input - {}, target - {}, meta - {}".format(i, input, target, meta))
             target = target.long().cuda(async=True)
             input_var = torch.autograd.Variable(input.cuda(), volatile=True)
             target_var = torch.autograd.Variable(target, volatile=True)
@@ -165,6 +173,7 @@ class Trainer():
 
         end = time.time()
         for i, (input, target, meta) in enumerate(loader):
+            print("train.validate_video=> i - {}, input - {}, target - {}, meta - {}".format(i, input, target, meta))
             target = target.long().cuda(async=True)
             assert target[0,:].eq(target[1,:]).all(), "val_video not synced"
             input_var = torch.autograd.Variable(input.cuda(), volatile=True)
