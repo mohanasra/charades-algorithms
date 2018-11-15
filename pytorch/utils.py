@@ -33,13 +33,28 @@ def reduce_charades_csv(inputFile, outputFile):
         writer.writerows(reducedSet)
             
 
+def gen_script_make_small_db(inputFile, outputPath, dataKind):
+    shFileName = "{}/make_small_{}_db.sh".format(outputPath, dataKind)
+    with open(inputFile) as srcFile, open(shFileName, "wx") as destFile:
+        reader = csv.DictReader(srcFile)
+        for row in reader:
+            shcmd = "cp Charades_v1_480/{}.mp4 {}/videos/\n".format(row['id'], outputPath)
+            destFile.write(shcmd)
+            shcmd = "cp -r Charades_v1_rgb/{} {}/rgb/\n".format(row['id'], outputPath)
+            destFile.write(shcmd)
+#             shcmd = "cp -r Charades_v1_rgb/{} small/videos/".format(row['id'])
+#             cmdLns.append(shcmd)
+            
+    print("gen_script_make_small_db completed")
 
 def main():
     global opt
     opt = parse()
     print(vars(opt))
 #     reduce_charades_csv('./datasets/Charades/Charades_v1_train.csv', './datasets/Charades/Charades_v1_train_small.csv')
-    reduce_charades_csv('./datasets/Charades/Charades_v1_test.csv', './datasets/Charades/Charades_v1_test_small.csv')
+#     reduce_charades_csv('./datasets/Charades/Charades_v1_test.csv', './datasets/Charades/Charades_v1_test_small.csv')
+    gen_script_make_small_db('./datasets/Charades/Charades_v1_train_small.csv', '/home/mohana.r/data/code/git/charades-algorithms/datasets/small', 'train')
+    gen_script_make_small_db('./datasets/Charades/Charades_v1_test_small.csv', '/home/mohana.r/data/code/git/charades-algorithms/datasets/small', 'test')
 
 
 if __name__ == '__main__':
