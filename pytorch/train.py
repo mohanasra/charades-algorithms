@@ -74,7 +74,7 @@ class Trainer():
         print("=> Trainer.train() before def part(x)")
 
         def part(x):
-            print("=> part() x - {}, len(x) - {}".format(x, len(x)))
+#             print("=> part() x - {}, len(x) - {}".format(x, len(x)))
             return itertools.islice(x, int(len(x)*args.train_size))
         end = time.time()
         print("=> Trainer.train() before for i")
