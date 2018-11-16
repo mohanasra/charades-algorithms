@@ -15,7 +15,7 @@ args = [
     '--val-size', '0.1',
     '--cache-dir', 'temp/gsigurds/ai2/caches/',
     '--pretrained',
-    '--resume', '/home/mohana.r/data/code/git/charades-algorithms/datasets/twostream_rgb.pth.tar',
+    '--pretrained-weights', '../datasets/twostream_rgb.pth.tar',
     '--evaluate',
 ]
 sys.argv.extend(args)

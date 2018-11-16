@@ -6,7 +6,7 @@ import os
 def parse():
     print('parsing arguments')
     parser = argparse.ArgumentParser(description='PyTorch Charades Training')
-    parser.add_argument('--data', metavar='DIR', default='/home/mohana.r/data/code/git/charades-algorithms/datasets/Charades_v1_rgb',
+    parser.add_argument('--data', metavar='DIR', default='../datasets/Charades_v1_rgb',
                         help='path to dataset')
     parser.add_argument('--dataset', metavar='DIR', default='fake',
                         help='name of dataset under datasets/')
