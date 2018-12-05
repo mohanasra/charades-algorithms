@@ -28,6 +28,7 @@ def create_model(args):
             print('loading pretrained-weights from {}'.format(args.pretrained_weights))
             model.load_state_dict(torch.load(args.pretrained_weights))
 
+    print(model)
     # replace last layer
     if hasattr(model, 'classifier'):
         print("=> Model has classifier")
@@ -42,7 +43,17 @@ def create_model(args):
     else:
         print("=> Model does not have classifier & fc")
         newcls = list(model.children())[:-1]
-        newcls = newcls[:-1] + [nn.Linear(newcls[-1].in_features, args.nclass).cuda()]
+        newcls = list(model.children())
+        lastSeq = list(*newcls[-1::1])
+#         print(len(lastSeq))
+#         print(lastSeq)
+        lastLinear = lastSeq[1]
+#         print(lastLinear)
+        newLinear = nn.Linear(lastLinear.in_features, args.nclass).cuda()
+        lastSeq[1] = newLinear
+        newLastSeq = [nn.Sequential(*lastSeq)]
+        newcls = newcls[:-1] + newLastSeq
+#         newcls = newcls[:-1] + [nn.Linear(lastLinear.in_features, args.nclass).cuda()]
         model = nn.Sequential(*newcls)
 
     if args.distributed:
