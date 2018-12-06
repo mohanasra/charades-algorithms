@@ -15,8 +15,8 @@ def ordered_load_state(model, chkpoint):
     """
     try:
         print('attempting to load normally...')
-        model.load_state_dict(chkpoint, strict=False)
-    except KeyError:  # assume order is the same, and use new labels
+        model.load_state_dict(chkpoint)
+    except Exception:  # assume order is the same, and use new labels
         print('keys do not match model, trying to align')
         modelkeys = model.state_dict().keys()
         fixed = OrderedDict([(z,y) 

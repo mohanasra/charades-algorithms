@@ -41,8 +41,12 @@ def create_model(args):
             model.AuxLogits.fc = nn.Linear(model.AuxLogits.fc.in_features, args.nclass)
     else:
         print("=> Model does not have classifier & fc")
-        newcls = list(model.children())[:-1]
-        newcls = newcls[:-1] + [nn.Linear(newcls[-1].in_features, args.nclass).cuda()]
+        newcls = list(model.children())
+        if hasattr(model, 'in_features'):
+            in_features = model.in_features
+        else:
+            in_features = newcls[-1].in_features
+        newcls = newcls[:-1] + [nn.Linear(in_features, args.nclass).cuda()]
         model = nn.Sequential(*newcls)
 
     if args.distributed:
