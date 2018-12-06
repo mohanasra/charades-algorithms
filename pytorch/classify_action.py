@@ -52,7 +52,8 @@ def load_charades_classes(charades_classes_file):
 def main():
     charades_classes = load_charades_classes('/home/mohana.r/data/code/git/charades-algorithms/pytorch/datasets/Charades/Charades_v1_classes_new.txt')
 #     print("charades classes - {}".format(charades_classes))
-    print_epoch_result('temp/gsigurds/ai2/caches/rgbnet_test/epoch_000.txt', charades_classes)
+#     print_epoch_result('temp/gsigurds/ai2/caches/rgbnet_test/epoch_000.txt', charades_classes)
+    print_epoch_result('../epoch_combined_000.txt', charades_classes)
 
 
 if __name__ == '__main__':
