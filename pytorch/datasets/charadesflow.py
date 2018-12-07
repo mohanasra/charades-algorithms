@@ -1,8 +1,8 @@
 """ Dataset loader for the Charades dataset """
 import torch
 import torchvision.transforms as transforms
-import transforms as arraytransforms
-from charadesrgb import Charades, cls2int
+from .transforms import Normalize, RandomResizedCrop, Resize, ToTensor, CenterCrop
+from .charadesrgb import Charades, cls2int
 from PIL import Image
 import numpy as np
 from glob import glob
@@ -42,7 +42,7 @@ class Charadesflow(Charades):
         datadir = path
         image_paths, targets, ids = [], [], []
 
-        for i, (vid, label) in enumerate(labels.iteritems()):
+        for i, (vid, label) in enumerate(labels.items()):
             iddir = datadir + '/' + vid
             lines = glob(iddir+'/*.jpg')
             n = len(lines)/2
@@ -63,7 +63,7 @@ class Charadesflow(Charades):
                     ids.append(vid)
             else:
                 for x in label:
-                    for ii in range(0, n-1, GAP):
+                    for ii in range(0, int(n-1), (GAP)):
                         if x['start'] < ii/float(FPS) < x['end']:
                             if ii>n-1-STACK-1: continue  # fit 10 optical flow pairs
                             impath = '{}/{}-{:06d}x.jpg'.format(
@@ -105,21 +105,21 @@ class Charadesflow(Charades):
 
 def get(args):
     """ Entry point. Call this function to get all Charades dataloaders """
-    normalize = arraytransforms.Normalize(mean=[0.502], std=[1.0])
+    normalize = Normalize(mean=[0.502], std=[1.0])
     train_file = args.train_file
     val_file = args.val_file
     train_dataset = Charadesflow(
         args.data, 'train', train_file, args.cache,
         transform=transforms.Compose([
-            arraytransforms.RandomResizedCrop(224),
-            arraytransforms.ToTensor(),
+            RandomResizedCrop(224),
+            ToTensor(),
             normalize,
             transforms.Lambda(lambda x: torch.cat(x)),
         ]))
     val_transforms = transforms.Compose([
-            arraytransforms.Resize(256),
-            arraytransforms.CenterCrop(224),
-            arraytransforms.ToTensor(),
+            Resize(256),
+            CenterCrop(224),
+            ToTensor(),
             normalize,
             transforms.Lambda(lambda x: torch.cat(x)),
         ])

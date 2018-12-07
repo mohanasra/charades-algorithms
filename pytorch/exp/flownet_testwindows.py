@@ -5,11 +5,12 @@ sys.path.insert(0, '.')
 from main import main
 
 args = [
-    '--name', __file__.split('/')[-1].split('.')[0],  # name is filename
+    '--name', "/" + __file__.split('\\')[-1].split('.')[0],  # name is filename
     '--print-freq', '1',
     '--dataset', 'charadesflow',
     '--arch', 'vgg16flow',
-    '--data','../datasets/Charades_v1_flow/',
+    '--data','../datasets/small/Charades_v1_flow/',
+    '--workers', 0,
     '--lr', '5e-3',
     '--lr-decay-rate','15',
     '--epochs','1',
